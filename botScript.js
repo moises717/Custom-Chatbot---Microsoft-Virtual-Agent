@@ -5,11 +5,12 @@ let addBtn = document.getElementById("productContent");
 let btnOpenChat = document.getElementById("btn-open-bot");
 let ClickHeadingOpenChat = document.getElementById("heading");
 
-const BOT_ID = "bot id";
+const BOT_ID = "bot token";
 const theURL = "https://powerva.microsoft.com/api/botmanagement/v1/directline/directlinetoken?botId=" + BOT_ID;
 
 const token = "user token";
 
+// estado del chatbot
 const store = window.WebChat.createStore({}, ({ dispatch }) => (next) => (action) => {
 	console.log(action);
 	if (action.type === "DIRECT_LINE/CONNECT_FULFILLED") {
@@ -76,7 +77,14 @@ function openChatbot() {
 	}
 }
 
+// Escuchar click en producto
 function listenProductClick(clickEvent) {
+	let isOpenChat = localStorage.getItem("isOpenChat");
+	if (isOpenChat === "false") {
+		openChatbot();
+		htmlAlert();
+	}
+
 	let lastMessage = store.getState().activities[[store.getState().activities.length - 1]].text;
 	let textToChat;
 
@@ -85,12 +93,16 @@ function listenProductClick(clickEvent) {
 			textToChat = clickEvent.target.innerText;
 		} else {
 			textToChat = "";
-			alertToUser();
+			alertToUser("Has click en el nombre del articulo!");
 		}
 		sendMessage(textToChat);
+	} else {
+		// html alert
+		htmlAlert();
 	}
 }
 
+// comenzar con el chatbot
 function startToChat() {
 	const avatarOptions = {
 		botAvatarImage: "./alita.jpeg",
@@ -115,23 +127,28 @@ function startToChat() {
 	}
 }
 
-function sendMessage(message) {
+function sendMessage(msg) {
 	store.dispatch({
 		type: "WEB_CHAT/SEND_MESSAGE",
 		payload: {
-			text: message,
+			text: msg,
 		},
 	});
 }
 
-function alertToUser() {
+function alertToUser(msg) {
 	store.dispatch({
 		type: "WEB_CHAT/SET_NOTIFICATION",
 		payload: {
 			alt: "ALiTA",
 			id: "alertForClick",
 			level: "info",
-			message: "Has click en el nombre del articulo!",
+			message: msg,
 		},
 	});
+}
+function htmlAlert() {
+	var toastEl = document.getElementById("toast");
+	var toast = new bootstrap.Toast(toastEl);
+	toast.show();
 }

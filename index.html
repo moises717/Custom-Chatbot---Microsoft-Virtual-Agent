@@ -128,6 +128,23 @@
         </div>
     </div>
 
+    <!-- bootstrap toast -->
+    <!-- Flexbox container for aligning the toasts -->
+    <div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center w-100">
+        <!-- Then put toasts within -->
+        <div class="toast" id="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <img src="./alita.jpeg" class="rounded me-2" width="20" height="20" alt="...">
+                <strong class="me-auto">ALITA</strong>
+                <small>Justo ahora</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" style="color: white;">
+                Sigue las instrucciones en el chatbot
+            </div>
+        </div>
+    </div>
+
     <!-- Elementos para la ventana del chatbot -->
     <button type="button" class="btn btn-primary bot-btn" id="btn-open-bot">
         <img src="./alita.jpeg" class="img-alita" alt="Imagen del bot"> REALIZAR PEDIDO <span
