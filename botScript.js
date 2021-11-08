@@ -5,10 +5,10 @@ let addBtn = document.getElementById("productContent");
 let btnOpenChat = document.getElementById("btn-open-bot");
 let ClickHeadingOpenChat = document.getElementById("heading");
 
-const BOT_ID = "your bot ID here";
+const BOT_ID = "bot id";
 const theURL = "https://powerva.microsoft.com/api/botmanagement/v1/directline/directlinetoken?botId=" + BOT_ID;
 
-const token = "user token here";
+const token = "user token";
 
 const store = window.WebChat.createStore({}, ({ dispatch }) => (next) => (action) => {
 	if (action.type === "DIRECT_LINE/CONNECT_FULFILLED") {
@@ -21,7 +21,7 @@ const store = window.WebChat.createStore({}, ({ dispatch }) => (next) => (action
 					channelData: {
 						postBack: true,
 					},
-					//Web Chat will show the 'Greeting' System Topic message which has a trigger-phrase 'hello'
+
 					name: "startConversation",
 					type: "event",
 				},
@@ -56,6 +56,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
 	ClickHeadingOpenChat.addEventListener("click", (event) => {
 		openChatbot();
 	});
+
+	addBtn.addEventListener("click", (e) => listenProductClick(e));
 });
 
 // Click button to open bot
@@ -69,59 +71,65 @@ function openChatbot() {
 	} else {
 		localStorage.setItem("isOpenChat", !JSON.parse(isOpenChat));
 		btnOpenChat.innerHTML = `${startText}` + "  TERMINAR CONVERSACION" + `${endText}`;
+
 		startToChat();
 	}
 }
 
-function startToChat() {
-	addBtn.addEventListener("click", (e) => {
-		let textToChat = "";
-		if (e.target.nodeName === "H5") {
-			textToChat = e.target.innerText;
+function listenProductClick(clickEvent) {
+	let lastMessage = store.getState().activities[[store.getState().activities.length - 1]].text;
+	let textToChat;
+
+	if (lastMessage.includes("articulo")) {
+		if (clickEvent.target.nodeName === "H5") {
+			textToChat = clickEvent.target.innerText;
 		} else {
 			textToChat = "";
-			toasAlert();
+			alertToUser();
 		}
+		sendMessage(textToChat);
+	}
+}
 
-		store.dispatch({
-			type: "WEB_CHAT/SEND_MESSAGE",
-			payload: {
-				text: textToChat,
-			},
-		});
-	});
-
-	store.dispatch({
-		type: "WEB_CHAT/SEND_EVENT",
-		payload: {
-			name: "webchat/join",
-			value: { language: window.navigator.language },
-		},
-	});
-
+function startToChat() {
 	const avatarOptions = {
 		botAvatarImage: "./alita.jpeg",
 		botAvatarInitials: "",
 	};
 
-	window.WebChat.renderWebChat(
-		{
-			directLine: window.WebChat.createDirectLine({
-				token,
-			}),
-			store,
-			styleOptions: avatarOptions,
-		},
-		document.getElementById("chat-content")
-	);
+	let botState = store.getState().connectivityStatus;
+
+	if (botState !== "connected") {
+		window.WebChat.renderWebChat(
+			{
+				directLine: window.WebChat.createDirectLine({
+					token,
+				}),
+				store,
+				styleOptions: avatarOptions,
+			},
+			document.getElementById("chat-content")
+		);
+	}
 }
 
-function toasAlert() {
-	var toastElList = document.getElementById("toast");
-	var toastElement = new bootstrap.Toast(toastElList, {
-		animation: true,
-		delay: 4000,
+function sendMessage(message) {
+	store.dispatch({
+		type: "WEB_CHAT/SEND_MESSAGE",
+		payload: {
+			text: message,
+		},
 	});
+}
 
-	toastElement.show();
+function alertToUser() {
+	store.dispatch({
+		type: "WEB_CHAT/SET_NOTIFICATION",
+		payload: {
+			alt: "ALiTA",
+			id: "alertForClick",
+			level: "info",
+			message: "Has click en el nombre del articulo!",
+		},
+	});
 }
