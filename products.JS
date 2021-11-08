@@ -27,10 +27,10 @@ function createProduct(product) {
     <div class="product py-4" > <span class="off bg-success">USD ${product.price}</span>
         <div class="text-center"> <img class="imgp" src="${product.image}" width="200"> </div>
         <div class="about text-center">
-        <span class="tt" data-bs-toggle="tooltip" data-bs-placement="top" title="PARA AGREGARLO AL CHATBOT">
+        <span class="tt" data-bs-toggle="tooltip" data-bs-placement="top" title="SOLICITAR EN EL CHATBOT">
         <h5 class="child" >${product.title}</h5>
         </span>
-        <small>Para solicitar este producto has click en el titulo y solicitalo con nuestro asistente virtual.</small>
+        <small>${product.description}</small>
         </div>
     </div>
 </div>`;

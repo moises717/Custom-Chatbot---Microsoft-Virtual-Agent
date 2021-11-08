@@ -11,6 +11,7 @@ const theURL = "https://powerva.microsoft.com/api/botmanagement/v1/directline/di
 const token = "user token";
 
 const store = window.WebChat.createStore({}, ({ dispatch }) => (next) => (action) => {
+	console.log(action);
 	if (action.type === "DIRECT_LINE/CONNECT_FULFILLED") {
 		dispatch({
 			meta: {
@@ -47,8 +48,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
 		startToChat();
 	}
 
-	// ALERTAS
-
+	//Eventos
 	btnOpenChat.addEventListener("click", (event) => {
 		openChatbot();
 	});
@@ -95,6 +95,8 @@ function startToChat() {
 	const avatarOptions = {
 		botAvatarImage: "./alita.jpeg",
 		botAvatarInitials: "",
+		userAvatarImage: "./user.png",
+		userAvatarInitials: "",
 	};
 
 	let botState = store.getState().connectivityStatus;

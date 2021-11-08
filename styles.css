@@ -181,7 +181,7 @@ button:active {
 }
 
 .heading {
-	background-color: #073b4c;
+	background-color: #4361ee;
 	position: absolute;
 	top: 0;
 	width: 100%;
@@ -189,11 +189,11 @@ button:active {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	cursor: pointer;
 }
 .heading h3 {
 	font-size: 12px;
 	color: white;
-	cursor: pointer;
 }
 
 .navbar {
