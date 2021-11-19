@@ -1,18 +1,18 @@
 /// variable globales
 
-let element = document.getElementById("bot-card");
-let addBtn = document.getElementById("productContent");
-let btnOpenChat = document.getElementById("btn-open-bot");
-let ClickHeadingOpenChat = document.getElementById("heading");
+let element = document.getElementById("bot-card")
+let addBtn = document.getElementById("productContent")
+let btnOpenChat = document.getElementById("btn-open-bot")
+let ClickHeadingOpenChat = document.getElementById("heading")
 
-const BOT_ID = "bot token";
-const theURL = "https://powerva.microsoft.com/api/botmanagement/v1/directline/directlinetoken?botId=" + BOT_ID;
+const BOT_ID = "700f3ffb-29a0-43af-bc61-ce9dd3dc8b06"
+const theURL = "https://powerva.microsoft.com/api/botmanagement/v1/directline/directlinetoken?botId=" + BOT_ID
 
-const token = "user token";
+const token = "CaRHEHlKlcg.jkrRozf2zM2cbK66CgabpqUUABUmokDm6w9L41f4Adk"
 
 // estado del chatbot
 const store = window.WebChat.createStore({}, ({ dispatch }) => (next) => (action) => {
-	console.log(action);
+	console.log(action)
 	if (action.type === "DIRECT_LINE/CONNECT_FULFILLED") {
 		dispatch({
 			meta: {
@@ -29,76 +29,76 @@ const store = window.WebChat.createStore({}, ({ dispatch }) => (next) => (action
 				},
 			},
 			type: "DIRECT_LINE/POST_ACTIVITY",
-		});
+		})
 	}
-	return next(action);
-});
+	return next(action)
+})
 
 // html content
 
-let startText = "<img src='./alita.jpeg' class='img-alita' alt='Imagen del bot'>";
+let startText = "<img src='./alita.jpeg' class='img-alita' alt='Imagen del bot'>"
 
 endText =
-	"<span class='position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary'><i class='fas fa-robot'></i></span>";
+	"<span class='position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary'><i class='fas fa-robot'></i></span>"
 
 // Eventos del DOM
 window.addEventListener("DOMContentLoaded", (event) => {
 	if (localStorage.getItem("isOpenChat") === "true") {
-		element.classList.toggle("show-bot");
-		btnOpenChat.innerHTML = `${startText}` + "  TERMINAR CONVERSACION" + `${endText}`;
-		startToChat();
+		element.classList.toggle("show-bot")
+		btnOpenChat.innerHTML = `${startText}` + "  TERMINAR CONVERSACION" + `${endText}`
+		startToChat()
 	}
 
 	//Eventos
 	btnOpenChat.addEventListener("click", (event) => {
-		openChatbot();
-	});
+		openChatbot()
+	})
 
 	ClickHeadingOpenChat.addEventListener("click", (event) => {
-		openChatbot();
-	});
+		openChatbot()
+	})
 
-	addBtn.addEventListener("click", (e) => listenProductClick(e));
-});
+	addBtn.addEventListener("click", (e) => listenProductClick(e))
+})
 
 // Click button to open bot
 function openChatbot() {
-	let isOpenChat = localStorage.getItem("isOpenChat");
-	element.classList.toggle("show-bot");
+	let isOpenChat = localStorage.getItem("isOpenChat")
+	element.classList.toggle("show-bot")
 
 	if (isOpenChat === "true") {
-		localStorage.setItem("isOpenChat", !JSON.parse(isOpenChat));
-		btnOpenChat.innerHTML = btnOpenChat.innerHTML = `${startText}` + " REALIZAR PEDIDO " + `${endText}`;
+		localStorage.setItem("isOpenChat", !JSON.parse(isOpenChat))
+		btnOpenChat.innerHTML = btnOpenChat.innerHTML = `${startText}` + " REALIZAR PEDIDO " + `${endText}`
 	} else {
-		localStorage.setItem("isOpenChat", !JSON.parse(isOpenChat));
-		btnOpenChat.innerHTML = `${startText}` + "  TERMINAR CONVERSACION" + `${endText}`;
+		localStorage.setItem("isOpenChat", !JSON.parse(isOpenChat))
+		btnOpenChat.innerHTML = `${startText}` + "  TERMINAR CONVERSACION" + `${endText}`
 
-		startToChat();
+		startToChat()
 	}
 }
 
 // Escuchar click en producto
 function listenProductClick(clickEvent) {
-	let isOpenChat = localStorage.getItem("isOpenChat");
+	let isOpenChat = localStorage.getItem("isOpenChat")
 	if (isOpenChat === "false") {
-		openChatbot();
-		htmlAlert();
+		openChatbot()
+		htmlAlert()
 	}
 
-	let lastMessage = store.getState().activities[[store.getState().activities.length - 1]].text;
-	let textToChat;
+	let lastMessage = store.getState().activities[[store.getState().activities.length - 1]].text
+	let textToChat
 
 	if (lastMessage.includes("articulo")) {
 		if (clickEvent.target.nodeName === "H5") {
-			textToChat = clickEvent.target.innerText;
+			textToChat = clickEvent.target.innerText
 		} else {
-			textToChat = "";
-			alertToUser("Has click en el nombre del articulo!");
+			textToChat = ""
+			alertToUser("Has click en el nombre del articulo!")
 		}
-		sendMessage(textToChat);
+		sendMessage(textToChat)
 	} else {
 		// html alert
-		htmlAlert();
+		htmlAlert()
 	}
 }
 
@@ -109,9 +109,9 @@ function startToChat() {
 		botAvatarInitials: "",
 		userAvatarImage: "./user.png",
 		userAvatarInitials: "",
-	};
+	}
 
-	let botState = store.getState().connectivityStatus;
+	let botState = store.getState().connectivityStatus
 
 	if (botState !== "connected") {
 		window.WebChat.renderWebChat(
@@ -123,7 +123,7 @@ function startToChat() {
 				styleOptions: avatarOptions,
 			},
 			document.getElementById("chat-content")
-		);
+		)
 	}
 }
 
@@ -133,7 +133,7 @@ function sendMessage(msg) {
 		payload: {
 			text: msg,
 		},
-	});
+	})
 }
 
 function alertToUser(msg) {
@@ -145,10 +145,10 @@ function alertToUser(msg) {
 			level: "info",
 			message: msg,
 		},
-	});
+	})
 }
 function htmlAlert() {
-	var toastEl = document.getElementById("toast");
-	var toast = new bootstrap.Toast(toastEl);
-	toast.show();
+	var toastEl = document.getElementById("toast")
+	var toast = new bootstrap.Toast(toastEl)
+	toast.show()
 }
